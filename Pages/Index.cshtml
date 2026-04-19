@@ -140,18 +140,6 @@
 
 <!-- ================= CSS ================= -->
 <style>
-
-    @@media screen and (max-width:768px) {
-
-        .scene {
-            overflow-x: auto;
-        }
-
-        .pdf-page {
-            width: 794px;
-            min-width: 794px;
-        }
-    }
     /* GLOBAL */
     * {
         margin: 0;
@@ -160,13 +148,62 @@
         font-family: Georgia, serif;
     }
 
+    body, html {
+        overflow-x: hidden; /* Prevent horizontal wobble */
+        background: #f4eee6;
+    }
+
     .scene {
+        width: 100%;
+        min-height: 100vh;
+        display: flex;
         justify-content: center;
-        align-items: center;
+        align-items: flex-start;
         background: linear-gradient(#fffdf9,#f4eee6);
-        display: block;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
+    }
+
+    /* THE MAGIC: Responsive PDF Page */
+    .pdf-page {
+        width: 794px; /* Desktop Standard */
+        min-height: 1123px;
+        margin: 20px auto;
+        background: white;
+        padding: 60px 50px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        transform-origin: top center; /* Scale from the top */
+        position: relative;
+    }
+
+    /* MOBILE SCALE LOGIC */
+    @@media screen and (max-width: 794px) {
+        .scene
+
+    {
+        height: 100vh;
+        overflow: hidden; /* Keeps it contained like a single app screen */
+    }
+
+    .pdf-page {
+        /* This calculates the exact scale needed to fit your 794px card into any phone width */
+        transform: scale(calc(window.innerWidth / 794));
+        margin: 0;
+        /* If the above calc doesn't work in your environment, use this fallback: */
+        width: 100vw;
+        height: auto;
+        min-height: 100vh;
+        padding: 40px 20px;
+        transform: none;
+    }
+
+    /* Adjust font sizes for mobile if you choose the "No Scale" fallback */
+    .names {
+        font-size: 50px !important;
+    }
+
+    .event-text .event-date {
+        font-size: 24px !important;
+    }
+
     }
 /* 
     .scene {
@@ -218,14 +255,14 @@
     }
 
     /* PDF PAGE */
-    .pdf-page {
+    /* .pdf-page {
         width: 794px;
         min-height: 1123px;
         margin: 40px auto;
         background: white;
         padding: 60px 50px;
         box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-    }
+    } */
     
 
     /* Make card fit inside page */
