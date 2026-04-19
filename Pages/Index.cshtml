@@ -140,6 +140,7 @@
 
 <!-- ================= CSS ================= -->
 <style>
+    @@import url('https://fonts.googleapis.com/css2?family=Mistral:wght@400;700&display=swap');
     /* GLOBAL */
     * {
         margin: 0;
@@ -155,16 +156,16 @@
 
     /* Update these in your <style> section */
     /* Update the global Scene */
-    .scene {
-        width: 100%;
-        height: 100vh;
-        display: flex !important;
-        justify-content: center !important;
-        align-items: center !important; /* Perfect vertical center for desktop & mobile */
+    .scene {/* Perfect vertical center for desktop & mobile */
         overflow: hidden !important;
         background: #f4eee6;
         position: fixed; /* Keeps the background static */
         inset: 0;
+        width: 100%;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center; /* Crucial for vertical center on desktop */
     }
 
     /* Update the PDF Page */
@@ -177,6 +178,10 @@
         box-shadow: 0 20px 60px rgba(0,0,0,0.15);
         transform-origin: center center !important; /* Critical for centering when scaled */
         flex-shrink: 0;
+        border-radius: 60px !important; /* Apply those curves from image 1 */
+        /* THE MAGICAL CHANGE: Anchor scaling to the CENTER */
+        margin: 0 !important;
+        position: relative;
     }
 
     .invite {
@@ -191,7 +196,7 @@
             display: flex !important;
             justify-content: center !important;
             align-items: center !important; /* Perfect vertical center */
-            height: 100vh !important;
+            height: calc(100vh - 60px);
             width: 100vw !important;
             overflow: hidden !important;
             position: fixed;
