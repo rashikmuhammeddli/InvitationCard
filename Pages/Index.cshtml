@@ -175,35 +175,25 @@
     }
 
     /* MOBILE SCALE LOGIC */
-    @@media screen and (max-width: 794px) {
-        .scene
+    @@media screen and (max-width: 768px) {
+        .pdf-page {
+            width: 794px !important;
+            min-width: 794px !important;
+            min-height: 1123px !important;
+            margin: 0 auto !important; /* Center it horizontally */
+            padding: 60px 50px !important;
+            /* Change this to top center to prevent it from floating in the middle */
+            transform-origin: top center;
+            flex-shrink: 0;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
 
-    {
-        height: 100vh;
-        overflow: hidden; /* Keeps it contained like a single app screen */
-    }
-
-    .pdf-page {
-        /* This calculates the exact scale needed to fit your 794px card into any phone width */
-        transform: scale(calc(window.innerWidth / 794));
-        margin: 0;
-        /* If the above calc doesn't work in your environment, use this fallback: */
-        width: 100vw;
-        height: auto;
-        min-height: 100vh;
-        padding: 40px 20px;
-        transform: none;
-    }
-
-    /* Adjust font sizes for mobile if you choose the "No Scale" fallback */
-    .names {
-        font-size: 50px !important;
-    }
-
-    .event-text .event-date {
-        font-size: 24px !important;
-    }
-
+        .scene {
+            /* Ensure the container allows scrolling if the scaled card is tall */
+            align-items: flex-start !important;
+            overflow-y: auto !important;
+            padding-top: 10px;
+        }
     }
 /* 
     .scene {
@@ -668,5 +658,28 @@
 
         requestAnimationFrame(animate);
     }
+            function fitToScreen() {
+        // Only scale if the screen is smaller than the desktop card width
+        if (window.innerWidth < 800) {
+            const card = document.querySelector('.pdf-page');
+            // Increasing 820 to 850 adds a small 'padding' on the left/right of the phone screen
+            const scale = window.innerWidth / 850;
+            card.style.transform = `scale(${scale})`;
+        }
+    }
+
+    // Call this inside your enterInvitation function
+    function enterInvitation(){
+        document.getElementById("intro").style.display="none";
+        document.getElementById("invite").style.display="flex";
+
+        fitToScreen(); // <--- Add this line
+
+        startCountdown();
+        document.getElementById("bgMusic").play().catch(()=>{});
+    }
+
+    // Also call it if the screen rotates
+    window.addEventListener('resize', fitToScreen);
 
 </script>
