@@ -153,25 +153,30 @@
         background: #f4eee6;
     }
 
+    /* Update these in your <style> section */
     .scene {
         width: 100%;
-        min-height: 100vh;
+        height: 100vh; /* Lock to screen height */
+        overflow: hidden; /* Disable scrolling */
         display: flex;
         justify-content: center;
-        align-items: flex-start;
-        background: linear-gradient(#fffdf9,#f4eee6);
+        align-items: center; /* Center vertically for a 'one-page' feel */
     }
 
-    /* THE MAGIC: Responsive PDF Page */
     .pdf-page {
-        width: 794px; /* Desktop Standard */
-        min-height: 1123px;
-        margin: 20px auto;
+        width: 794px;
+        min-height: auto; /* Let content determine height */
+        max-height: 1123px;
+        margin: 0 !important;
         background: white;
-        padding: 60px 50px;
+        padding: 40px 50px; /* Reduced padding slightly to save space */
         box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-        transform-origin: top center; /* Scale from the top */
-        position: relative;
+        transform-origin: center center; /* Scale from center for balanced fit */
+    }
+
+    .invite {
+        height: 100vh;
+        width: 100vw;
     }
 
     /* MOBILE SCALE LOGIC */
@@ -274,6 +279,7 @@
         justify-content: center;
         align-items: center;
         width: 100%;
+        height: 100vh;
     }
 
     /* CARD */
@@ -658,26 +664,43 @@
 
         requestAnimationFrame(animate);
     }
-            function fitToScreen() {
-        // Only scale if the screen is smaller than the desktop card width
-        if (window.innerWidth < 800) {
-            const card = document.querySelector('.pdf-page');
-            // Increasing 820 to 850 adds a small 'padding' on the left/right of the phone screen
-            const scale = window.innerWidth / 850;
-            card.style.transform = `scale(${scale})`;
-        }
+
+    function fitToScreen() {
+        const card = document.querySelector('.pdf-page');
+        if (!card) return;
+
+        // Reset scale to measure actual size
+        card.style.transform = 'scale(1)';
+
+        const cardWidth = card.offsetWidth;
+        const cardHeight = card.offsetHeight;
+        const windowWidth = window.innerWidth;
+        const windowHeight = window.innerHeight;
+
+        // Calculate scale for width and height
+        // 0.9 provides a small margin so it doesn't touch the edges
+        const scaleX = (windowWidth * 0.9) / cardWidth;
+        const scaleY = (windowHeight * 0.9) / cardHeight;
+
+        // Use the SMALLEST scale to ensure it fits both ways
+        const finalScale = Math.min(scaleX, scaleY);
+
+        card.style.transform = `scale(${finalScale})`;
     }
 
-    // Call this inside your enterInvitation function
+    // Update your enterInvitation to call this
     function enterInvitation(){
         document.getElementById("intro").style.display="none";
         document.getElementById("invite").style.display="flex";
 
-        fitToScreen(); // <--- Add this line
+        // Small timeout ensures the browser has rendered the 'invite' div before measuring
+        setTimeout(fitToScreen, 10);
 
         startCountdown();
         document.getElementById("bgMusic").play().catch(()=>{});
     }
+
+    window.addEventListener('resize', fitToScreen);
 
     // Also call it if the screen rotates
     window.addEventListener('resize', fitToScreen);
