@@ -182,25 +182,28 @@
     /* MOBILE SCALE LOGIC */
     @@media screen and (max-width: 768px) {
         .scene {
-            height: 100vh;
-            width: 100vw;
-            overflow: hidden; /* Prevents scrolling entirely */
-            display: flex;
-            justify-content: center;
-            align-items: center; /* Centers the shrunken card perfectly */
+            /* Force the container to be the exact size of the phone screen */
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important; /* This centers the card vertically */
+            height: 100vh !important;
+            width: 100vw !important;
+            overflow: hidden;
             position: fixed;
-            inset: 0;
+            top: 0;
+            left: 0;
         }
 
         .pdf-page {
-            width: 794px !important;
-            min-height: auto !important; /* Let content dictate height */
+            /* Reset margins and force desktop width */
             margin: 0 !important;
-            padding: 40px 50px !important;
-            /* Change origin to center so it shrinks into the middle of the screen */
-            transform-origin: center center;
-            flex-shrink: 0;
+            width: 794px !important;
+            min-height: auto !important;
+            /* The Magic: Scaling from the exact center */
+            transform-origin: center center !important;
             box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+            border-radius: 25px !important;
         }
     }
 /* 
@@ -274,6 +277,7 @@
         text-align: center;
         justify-content: center;
         align-items: center;
+        border-radius: 25px !important;
     }
 
     /* INVITE */
@@ -668,26 +672,26 @@
         requestAnimationFrame(animate);
     }
 
-        function fitToScreen() {
+           function fitToScreen() {
         const card = document.querySelector('.pdf-page');
         if (!card || window.innerWidth >= 800) return;
 
-        // 1. Reset scale to measure real size
-        card.style.transform = 'scale(1)';
+        // Reset everything for a fresh measurement
+        card.style.transform = 'scale(1) translateY(0)';
 
-        // 2. Get dimensions
         const cardWidth = card.offsetWidth;
         const cardHeight = card.offsetHeight;
         const windowWidth = window.innerWidth;
         const windowHeight = window.innerHeight;
 
-        // 3. Calculate scale for width and height (with 5% breathing room)
-        const scaleX = (windowWidth * 0.95) / cardWidth;
-        const scaleY = (windowHeight * 0.95) / cardHeight;
+        // Calculate fit for both dimensions
+        const scaleX = (windowWidth * 0.96) / cardWidth;
+        const scaleY = (windowHeight * 0.96) / cardHeight;
 
-        // 4. Use the SMALLEST scale so nothing is cut off
+        // Use the tightest fit
         const finalScale = Math.min(scaleX, scaleY);
 
+        // Apply the scale centered
         card.style.transform = `scale(${finalScale})`;
     }
 
