@@ -154,24 +154,29 @@
     }
 
     /* Update these in your <style> section */
+    /* Update the global Scene */
     .scene {
         width: 100%;
-        height: 100vh; /* Lock to screen height */
-        overflow: hidden; /* Disable scrolling */
-        display: flex;
-        justify-content: center;
-        align-items: center; /* Center vertically for a 'one-page' feel */
+        height: 100vh;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important; /* Perfect vertical center for desktop & mobile */
+        overflow: hidden !important;
+        background: #f4eee6;
+        position: fixed; /* Keeps the background static */
+        inset: 0;
     }
 
+    /* Update the PDF Page */
     .pdf-page {
         width: 794px;
-        min-height: auto; /* Let content determine height */
-        max-height: 1123px;
-        margin: 0 !important;
-        background: white;
-        padding: 40px 50px; /* Reduced padding slightly to save space */
+        background: white !important;
+        padding: 50px;
+        border-radius: 60px !important; /* Those curved edges you wanted */
+        overflow: hidden !important;
         box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-        transform-origin: center center; /* Scale from center for balanced fit */
+        transform-origin: center center !important; /* Critical for centering when scaled */
+        flex-shrink: 0;
     }
 
     .invite {
@@ -182,28 +187,30 @@
     /* MOBILE SCALE LOGIC */
     @@media screen and (max-width: 768px) {
         .scene {
-            /* Force the container to be the exact size of the phone screen */
+            /* Force the container to fill the screen and center content */
             display: flex !important;
             justify-content: center !important;
-            align-items: center !important; /* This centers the card vertically */
+            align-items: center !important; /* Perfect vertical center */
             height: 100vh !important;
             width: 100vw !important;
-            overflow: hidden;
+            overflow: hidden !important;
             position: fixed;
             top: 0;
             left: 0;
+            margin: 0;
+            padding: 0;
         }
 
         .pdf-page {
-            /* Reset margins and force desktop width */
+            /* Remove margins that might clash with flex centering */
             margin: 0 !important;
+            /* Forces the desktop width so scaling works correctly */
             width: 794px !important;
             min-height: auto !important;
-            /* The Magic: Scaling from the exact center */
+            /* This prevents the card from sliding down when scaled */
             transform-origin: center center !important;
             box-shadow: 0 10px 40px rgba(0,0,0,0.1);
             flex-shrink: 0;
-            border-radius: 25px !important;
         }
     }
 /* 
@@ -672,36 +679,45 @@
         requestAnimationFrame(animate);
     }
 
-           function fitToScreen() {
+                   function fitToScreen() {
         const card = document.querySelector('.pdf-page');
-        if (!card || window.innerWidth >= 800) return;
+        if (!card) return;
 
-        // Reset everything for a fresh measurement
-        card.style.transform = 'scale(1) translateY(0)';
+        // Reset scale to measure the actual content height
+        card.style.transform = 'scale(1)';
 
         const cardWidth = card.offsetWidth;
         const cardHeight = card.offsetHeight;
         const windowWidth = window.innerWidth;
         const windowHeight = window.innerHeight;
 
-        // Calculate fit for both dimensions
+        // Calculate scale to fit both width and height (with 4% padding)
         const scaleX = (windowWidth * 0.96) / cardWidth;
         const scaleY = (windowHeight * 0.96) / cardHeight;
 
-        // Use the tightest fit
-        const finalScale = Math.min(scaleX, scaleY);
+        // Pick the smallest scale so it fits perfectly in the window
+        let finalScale = Math.min(scaleX, scaleY);
 
-        // Apply the scale centered
+        // If on a large desktop where it already fits, don't scale UP
+        if (finalScale > 1) finalScale = 1;
+
         card.style.transform = `scale(${finalScale})`;
     }
 
+    // Update resize listener
+    window.addEventListener('resize', fitToScreen);
+
     // Ensure this is called when entering
-    function enterInvitation(){
+       function enterInvitation(){
         document.getElementById("intro").style.display="none";
         document.getElementById("invite").style.display="flex";
 
-        // Give the browser a millisecond to render before scaling
-        setTimeout(fitToScreen, 50);
+        // Re-call fitToScreen to ensure it centers based on the
+        // now-visible height
+        setTimeout(fitToScreen, 10);
+
+        // Add this line to force the main scene to fill the space
+        document.querySelector('.scene').style.height = window.innerHeight + 'px';
 
         startCountdown();
         document.getElementById("bgMusic").play().catch(()=>{});
