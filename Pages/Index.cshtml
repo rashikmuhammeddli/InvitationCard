@@ -142,43 +142,16 @@
 <style>
 
     @@media (max-width: 768px) {
-        .scene
 
-    {
-        padding: 20px 10px;
-    }
+        .scene {
+            overflow-x: auto;
+            padding: 20px;
+        }
 
-    .pdf-page {
-        width: 100%;
-        min-height: auto;
-        margin: 0;
-        padding: 30px 20px;
-        border-radius: 12px;
-    }
-
-    .card {
-        padding: 0;
-    }
-
-    .names {
-        font-size: 42px;
-    }
-
-    .event-text .event-date {
-        font-size: 24px;
-    }
-
-    .countdown {
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-
-    .yes-btn {
-        padding: 14px 40px;
-    }
-
-    }
-
+        .pdf-page {
+            width: 794px;
+            min-width: 794px;
+        }
     }
     /* GLOBAL */
     * {
@@ -189,11 +162,12 @@
     }
 
     .scene {
-        display: flex;
         justify-content: center;
         align-items: center;
         padding: 40px 0;
         background: linear-gradient(#fffdf9,#f4eee6);
+        display: block;
+        overflow-x: auto;
     }
 /* 
     .scene {
@@ -244,15 +218,16 @@
         cursor: pointer;
     }
 
+    /* PDF PAGE */
     .pdf-page {
-        width: 210mm;
-        min-height: 297mm;
+        width: 794px; /* A4 width in pixels */
+        min-height: 1123px; /* A4 height in pixels */
         margin: 40px auto;
         background: white;
-        padding: 25mm 20mm;
-        border-radius: 6px;
-        box-shadow: 0 0 0 1px rgba(0,0,0,0.05), 0 20px 60px rgba(0,0,0,0.15);
+        padding: 60px 50px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.15);
     }
+    
 
     /* Make card fit inside page */
     .card {
