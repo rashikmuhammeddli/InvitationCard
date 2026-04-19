@@ -141,11 +141,10 @@
 <!-- ================= CSS ================= -->
 <style>
 
-    @@media (max-width: 768px) {
+    @@media screen and (max-width:768px) {
 
         .scene {
             overflow-x: auto;
-            padding: 10px;
         }
 
         .pdf-page {
@@ -167,6 +166,7 @@
         background: linear-gradient(#fffdf9,#f4eee6);
         display: block;
         overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
     }
 /* 
     .scene {
@@ -219,8 +219,8 @@
 
     /* PDF PAGE */
     .pdf-page {
-        width: 794px; /* A4 width in pixels */
-        min-height: 1123px; /* A4 height in pixels */
+        width: 794px;
+        min-height: 1123px;
         margin: 40px auto;
         background: white;
         padding: 60px 50px;
