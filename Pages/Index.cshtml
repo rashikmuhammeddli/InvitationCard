@@ -21,7 +21,7 @@
 
     <!-- 💌 INVITATION CARD -->
     <div id="invite" class="invite">
-
+        <div class="pdf-page">
         <div class="card">
 
             <!-- TEXT (UNCHANGED CONTENT) -->
@@ -85,6 +85,7 @@
                 <button class="no-btn" onclick="showNo()">Unfortunately, I can't come..</button>
             </div>
 
+        </div>
         </div>
 
     </div>
@@ -152,6 +153,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        padding: 40px 0;
         background: linear-gradient(#fffdf9,#f4eee6);
     }
 /* 
@@ -203,6 +205,29 @@
         cursor: pointer;
     }
 
+    .pdf-page {
+        width: 210mm;
+        min-height: 297mm;
+        margin: 40px auto;
+        background: white;
+        padding: 25mm 20mm;
+        border-radius: 6px;
+        box-shadow: 0 0 0 1px rgba(0,0,0,0.05), 0 20px 60px rgba(0,0,0,0.15);
+    }
+
+    /* Make card fit inside page */
+    .card {
+        width: 100%;
+        max-width: 100%;
+        min-height: auto;
+        box-shadow: none;
+        border: none;
+        padding: 0;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+    }
+
     /* INVITE */
     .invite {
         display: none;
@@ -212,7 +237,7 @@
     }
 
     /* CARD */
-    .card {
+    /* .card {
         background: rgba(255,255,255,0.97);
         min-height: 70vh;
         padding: 90px 80px;
@@ -226,7 +251,7 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-    }
+    } */
 
     /* ================= MODERN TEXT STYLE ================= */
 
