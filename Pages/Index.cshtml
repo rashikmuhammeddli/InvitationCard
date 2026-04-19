@@ -149,12 +149,18 @@
     }
 
     .scene {
-        height: 100vh;
         display: flex;
         justify-content: center;
         align-items: center;
         background: linear-gradient(#fffdf9,#f4eee6);
     }
+/* 
+    .scene {
+        min-height: 100vh;
+        height: auto;
+        display: block;
+        padding: 40px 0;
+    } */
 
     /* INTRO */
     .intro {
@@ -208,7 +214,7 @@
     /* CARD */
     .card {
         background: rgba(255,255,255,0.97);
-        min-height: 75vh;
+        min-height: 70vh;
         padding: 90px 80px;
         border-radius: 35px;
         width: 95%;
