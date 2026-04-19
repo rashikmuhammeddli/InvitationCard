@@ -181,23 +181,26 @@
 
     /* MOBILE SCALE LOGIC */
     @@media screen and (max-width: 768px) {
-        .pdf-page {
-            width: 794px !important;
-            min-width: 794px !important;
-            min-height: 1123px !important;
-            margin: 0 auto !important; /* Center it horizontally */
-            padding: 60px 50px !important;
-            /* Change this to top center to prevent it from floating in the middle */
-            transform-origin: top center;
-            flex-shrink: 0;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        .scene {
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden; /* Prevents scrolling entirely */
+            display: flex;
+            justify-content: center;
+            align-items: center; /* Centers the shrunken card perfectly */
+            position: fixed;
+            inset: 0;
         }
 
-        .scene {
-            /* Ensure the container allows scrolling if the scaled card is tall */
-            align-items: flex-start !important;
-            overflow-y: auto !important;
-            padding-top: 10px;
+        .pdf-page {
+            width: 794px !important;
+            min-height: auto !important; /* Let content dictate height */
+            margin: 0 !important;
+            padding: 40px 50px !important;
+            /* Change origin to center so it shrinks into the middle of the screen */
+            transform-origin: center center;
+            flex-shrink: 0;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
         }
     }
 /* 
@@ -665,42 +668,40 @@
         requestAnimationFrame(animate);
     }
 
-    function fitToScreen() {
+        function fitToScreen() {
         const card = document.querySelector('.pdf-page');
-        if (!card) return;
+        if (!card || window.innerWidth >= 800) return;
 
-        // Reset scale to measure actual size
+        // 1. Reset scale to measure real size
         card.style.transform = 'scale(1)';
 
+        // 2. Get dimensions
         const cardWidth = card.offsetWidth;
         const cardHeight = card.offsetHeight;
         const windowWidth = window.innerWidth;
         const windowHeight = window.innerHeight;
 
-        // Calculate scale for width and height
-        // 0.9 provides a small margin so it doesn't touch the edges
-        const scaleX = (windowWidth * 0.9) / cardWidth;
-        const scaleY = (windowHeight * 0.9) / cardHeight;
+        // 3. Calculate scale for width and height (with 5% breathing room)
+        const scaleX = (windowWidth * 0.95) / cardWidth;
+        const scaleY = (windowHeight * 0.95) / cardHeight;
 
-        // Use the SMALLEST scale to ensure it fits both ways
+        // 4. Use the SMALLEST scale so nothing is cut off
         const finalScale = Math.min(scaleX, scaleY);
 
         card.style.transform = `scale(${finalScale})`;
     }
 
-    // Update your enterInvitation to call this
+    // Ensure this is called when entering
     function enterInvitation(){
         document.getElementById("intro").style.display="none";
         document.getElementById("invite").style.display="flex";
 
-        // Small timeout ensures the browser has rendered the 'invite' div before measuring
-        setTimeout(fitToScreen, 10);
+        // Give the browser a millisecond to render before scaling
+        setTimeout(fitToScreen, 50);
 
         startCountdown();
         document.getElementById("bgMusic").play().catch(()=>{});
     }
-
-    window.addEventListener('resize', fitToScreen);
 
     // Also call it if the screen rotates
     window.addEventListener('resize', fitToScreen);
